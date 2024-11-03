@@ -51,8 +51,8 @@ function App() {
   return (
     <div className="App">
       <h1>Blasting Calculation</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
+      <form onSubmit={handleSubmit} className="form-container">
+        <div className="input-group">
           <label>Powder Factor (z): </label>
           <input
             type="number"
@@ -66,41 +66,46 @@ function App() {
         <h2>Explosive Options</h2>
         {options.map((option, index) => (
           <div key={index} className="option">
-            <label>Diameter (d): </label>
-            <input
-              type="number"
-              value={option.diameter}
-              onChange={(e) =>
-                handleOptionChange(index, 'diameter', e.target.value)
-              }
-              required
-            />
-            <label>Cost (c): </label>
-            <input
-              type="number"
-              value={option.cost}
-              onChange={(e) =>
-                handleOptionChange(index, 'cost', e.target.value)
-              }
-              required
-            />
-            <label>Number of Holes (nh): </label>
-            <input
-              type="number"
-              value={option.numberOfHoles}
-              onChange={(e) =>
-                handleOptionChange(index, 'numberOfHoles', e.target.value)
-              }
-              required
-            />
+            <div className="input-group">
+              <label>Diameter of Hole (d) (mm):</label>
+              <input
+                type="number"
+                value={option.diameter}
+                onChange={(e) =>
+                  handleOptionChange(index, 'diameter', e.target.value)
+                }
+                required
+              />
+            </div>
+            <div className="input-group">
+              <label>Cost (c) (Rs/Kg):</label>
+              <input
+                type="number"
+                value={option.cost}
+                onChange={(e) =>
+                  handleOptionChange(index, 'cost', e.target.value)
+                }
+                required
+              />
+            </div>
+            <div className="input-group">
+              <label>Number of Holes (nh):</label>
+              <input
+                type="number"
+                value={option.numberOfHoles}
+                onChange={(e) =>
+                  handleOptionChange(index, 'numberOfHoles', e.target.value)
+                }
+                required
+              />
+            </div>
           </div>
         ))}
 
-        <button type="button" onClick={addOption}>
+        <button type="button" className="button" onClick={addOption}>
           Add Option
         </button>
-        <br />
-        <button type="submit">Calculate</button>
+        <button type="submit" className="button submit-button">Calculate</button>
       </form>
 
       {result && (
