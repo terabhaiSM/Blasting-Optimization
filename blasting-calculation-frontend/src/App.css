@@ -75,17 +75,48 @@ input {
   background-color: #218838;
 }
 
+.remove-button {
+  background-color: #dc3545;
+  margin-top: 10px;
+}
+
+.remove-button:hover {
+  background-color: #c82333;
+}
+
 .result {
   margin-top: 20px;
-  padding: 15px;
+  padding: 20px;
+  background-color: #f0f9ff;
   border-radius: 10px;
-  background-color: #e6ffe6;
-  border: 1px solid #c3e6cb;
-  color: #155724;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  max-width: 500px;
+  margin: 20px auto;
 }
 
 .result h2 {
-  color: #333;
-  font-size: 20px;
+  color: #007acc;
+  font-size: 24px;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #007acc;
+  padding-bottom: 5px;
 }
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 18px;
+}
+
+.result-label {
+  font-weight: bold;
+  color: #333;
+}
+
+.result-value {
+  color: #007acc;
+  font-weight: 600;
+}
+

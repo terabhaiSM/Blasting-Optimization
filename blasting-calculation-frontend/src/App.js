@@ -14,6 +14,12 @@ function App() {
     setOptions([...options, { diameter: '', cost: '', numberOfHoles: '' }]);
   };
 
+  // Remove an option by index
+  const removeOption = (index) => {
+    const newOptions = options.filter((_, i) => i !== index);
+    setOptions(newOptions);
+  };
+
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -53,7 +59,7 @@ function App() {
       <h1>Blasting Calculation</h1>
       <form onSubmit={handleSubmit} className="form-container">
         <div className="input-group">
-          <label>Powder Factor (z): </label>
+          <label>Powder Factor (z) :</label>
           <input
             type="number"
             value={z}
@@ -99,6 +105,13 @@ function App() {
                 required
               />
             </div>
+            <button
+              type="button"
+              className="button remove-button"
+              onClick={() => removeOption(index)}
+            >
+              Remove
+            </button>
           </div>
         ))}
 
@@ -107,22 +120,55 @@ function App() {
         </button>
         <button type="submit" className="button submit-button">Calculate</button>
       </form>
-
-      {result && (
-        <div className="result">
-          <h2>Selected Option: {result.selectedOption}</h2>
-          <p>Diameter of hole (d): {result.d}</p>
-          <p>Height of bench (h): {result.h}</p>
-          <p>Number of holes (nh): {result.nh}</p>
-          <p>Cost of explosive (c): {result.c}</p>
-          <p>Burden (b): {result.b}</p>
-          <p>Length of hole (l): {result.l}</p>
-          <p>Spacing (s): {result.s}</p>
-          <p>Fragmentation size (x): {result.x}</p>
-          <p>Charge per hole (q): {result.q}</p>
-          <p>Total cost of blasting (t): {result.t}</p>
-        </div>
-      )}
+{result && (
+  <div className="result">
+    <h2>Calculation Results</h2>
+    <div className="result-item">
+      <span className="result-label">Selected Option:</span>
+      <span className="result-value">{result.selectedOption}</span>
+    </div>
+    <div className="result-item">
+      <span className="result-label">Diameter of hole (d):</span>
+      <span className="result-value">{result.d} mm</span>
+    </div>
+    <div className="result-item">
+      <span className="result-label">Height of bench (h):</span>
+      <span className="result-value">{result.h.toFixed(3)} m</span>
+    </div>
+    <div className="result-item">
+      <span className="result-label">Number of holes (nh):</span>
+      <span className="result-value">{result.nh}</span>
+    </div>
+    <div className="result-item">
+      <span className="result-label">Cost of explosive (c):</span>
+      <span className="result-value">₹{result.c}</span>
+    </div>
+    <div className="result-item">
+      <span className="result-label">Burden (b):</span>
+      <span className="result-value">{result.b.toFixed(3)} m</span>
+    </div>
+    <div className="result-item">
+      <span className="result-label">Length of hole (l):</span>
+      <span className="result-value">{result.l.toFixed(3)} m</span>
+    </div>
+    <div className="result-item">
+      <span className="result-label">Spacing (s):</span>
+      <span className="result-value">{result.s.toFixed(3)} m</span>
+    </div>
+    <div className="result-item">
+      <span className="result-label">Fragmentation size (x):</span>
+      <span className="result-value">{result.x.toFixed(3)} mm</span>
+    </div>
+    <div className="result-item">
+      <span className="result-label">Charge per hole (q):</span>
+      <span className="result-value">{result.q.toExponential(3)} kg</span>
+    </div>
+    <div className="result-item">
+      <span className="result-label">Total cost of blasting (t):</span>
+      <span className="result-value">₹{result.t.toFixed(6)}</span>
+    </div>
+  </div>
+)}
     </div>
   );
 }
