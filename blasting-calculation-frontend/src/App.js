@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import jsPDF from "jspdf";
+import html2canvas from 'html2canvas';
 import "./App.css";
 
 function App() {
@@ -121,7 +123,7 @@ function App() {
     }
 
     axios
-      .post("http://localhost:5001/calculate", {
+      .post(`${process.env.REACT_APP_BACKEND_URL}/calculate`, {
         z,
         n: validOptions.length,
         options: validOptions,
@@ -139,6 +141,90 @@ function App() {
     const newOptions = [...options];
     newOptions[index][field] = value;
     setOptions(newOptions);
+  };
+
+  // Generate PDF with input, options, results, and descriptions
+  // const generatePDF = () => {
+  //   const doc = new jsPDF();
+
+  //   // Title
+  //   doc.setFontSize(18);
+  //   doc.text("Blasting Calculation Report", 10, 10);
+
+  //   // Input parameters
+  //   doc.setFontSize(14);
+  //   doc.text("Input Parameters:", 10, 20);
+  //   doc.setFontSize(12);
+  //   doc.text(`Powder Factor (z): ${z}`, 10, 30);
+
+  //   // Explosive options
+  //   doc.text("Explosive Options:", 10, 40);
+  //   options.forEach((option, index) => {
+  //     doc.text(
+  //       `Option ${index + 1} - Diameter: ${option.diameter} mm, Cost: ₹${option.cost}, Number of Holes: ${option.numberOfHoles}`,
+  //       10,
+  //       50 + index * 10
+  //     );
+  //   });
+
+  //   // Results
+  //   if (result) {
+  //     doc.setFontSize(14);
+  //     doc.text("Results:", 10, 70 + options.length * 10);
+  //     doc.setFontSize(12);
+
+  //     Object.keys(result).forEach((key, index) => {
+  //       doc.text(
+  //         `${descriptions[key]?.title || key}: ${result[key]}`,
+  //         10,
+  //         80 + options.length * 10 + index * 10
+  //       );
+  //     });
+  //   }
+
+  //   // Notes/Descriptions
+  //   doc.setFontSize(14);
+  //   doc.text("Notes:", 10, 90 + options.length * 10 + (result ? Object.keys(result).length * 10 : 0));
+  //   doc.setFontSize(12);
+  //   let yPosition = 100 + options.length * 10 + (result ? Object.keys(result).length * 10 : 0);
+  //   Object.values(descriptions).forEach((desc, index) => {
+  //     doc.text(desc.title, 10, yPosition);
+  //     doc.setFontSize(11);
+  //     doc.text(`Explanation: ${desc.explanation}`, 10, yPosition + 10);
+  //     doc.text(`Context: ${desc.context}`, 10, yPosition + 20);
+  //     yPosition += 30;
+  //   });
+
+  //   // Save PDF
+  //   doc.save("Blasting_Calculation_Report.pdf");
+  // };
+  const generatePDF = () => {
+    const doc = new jsPDF();
+
+    // doc.setFontSize(18);
+    // doc.text("Blasting Calculation Report", 10, 10);
+  
+    // doc.setFontSize(12);
+    // doc.text("Your required calculations are given below:", 10, 20);
+
+    // Render the dynamic HTML content into the PDF
+    const resultDiv = document.querySelector(".result");
+    if (resultDiv) {
+      // Use html2canvas to convert the HTML content to a canvas
+      html2canvas(resultDiv, { scale: 2 }).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const imgWidth = 190; // Set the width of the image in the PDF (A4 page width minus margins)
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+        // Add the rendered HTML content as an image in the PDF
+        doc.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
+
+        // Save the PDF
+        doc.save("Blasting_Calculation_Report.pdf");
+      });
+    } else {
+      console.error("Result div not found");
+    }
   };
 
   return (
@@ -207,6 +293,13 @@ function App() {
         </button>
         <button type="submit" className="button submit-button">
           Calculate
+        </button>
+        <button
+          type="button"
+          className="button download-button"
+          onClick={generatePDF}
+        >
+          Download PDF
         </button>
       </form>
 
